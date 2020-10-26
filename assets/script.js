@@ -23,20 +23,6 @@ function passwordConcat (length, str) {
     return passwd;
 }
 
-function newPassword(bools) {
-    var passWord = "";
-    const specCha = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
-    const specChar = specCha + '"';
-    const charSets = ["abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789", specChar];
-    passChar = "";
-    for (var i = 0; i < bools.length; i++) {
-        if (bools[i] === true) {
-            passChar += charSets[i];
-        }
-    }
-    console.log(passChar);
-}
-
 // Compare 2 strings and check whether they have mutually exclusive characters
 function mustContain(passwd, str) {
     var doesCont = false;
@@ -51,7 +37,50 @@ function mustContain(passwd, str) {
     return doesCont;
 }
 
-// Given 2 strings, creates a password and checks if it contains characters from each string
+/* function setChange() */
+
+function newPassword(vals) {
+    const specCha = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
+    const specChar = specCha + '"';
+    const charSets = ["abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789", specChar];
+    var length = vals.shift();
+    var charCheck = [];
+    var newSet = [];
+    var passChar = "";
+    for (var i = 0; i < vals.length; i++) {
+        console.log(vals[i]);
+        if (vals[i] === true) {
+            charCheck.push(false);
+            newSet.push(charSets[i]);
+            passChar += charSets[i];
+        }
+        console.log(newSet);
+    }
+
+    while (checkTrue(charCheck) === false) {
+        for (var j = 0; j < charCheck.length; j++) {
+            charCheck[j] = false;            
+        }
+        var word = passwordConcat(length, passChar);
+        console.log(word);
+        for (var k = 0; k < charCheck.length; k++) {
+            charCheck[k] = mustContain(word, newSet[k]);
+            console.log(charCheck[k]);
+        }
+    }
+    return word;
+}
+
+function checkTrue(arrayF) {
+    for (var i = 0; i < arrayF.length; i++) {
+        if (arrayF[i] === false) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/* // Given 2 strings, creates a password and checks if it contains characters from each string
 function contain2 (length, a, b) {
     var contAll1 = false, contAll2 = false;
     // The loop runs until both variables change to true
@@ -74,7 +103,7 @@ function contain3 (length, a, b, c) {
         contAll1 = mustContain (passwd, a), contAll2 = mustContain (passwd, b), contAll3 = mustContain (passwd, c);
     }
     return passwd;
-}
+} */
 
 class Pwd {
     constructor(length, low, up, numb, specChar){
@@ -86,14 +115,13 @@ class Pwd {
     }
 }
 
-function getBools(map1) {
-    values = [];
+function getVals(map1) {
+    let vals = [];
     const iterator1 = map1.values();
-    console.log(typeof(iterator1.next().value));
-    for (var i = 0; i < map1.size - 1; i++) {
-        values.push(iterator1.next().value);
+    for (var i = 0; i < map1.size; i++) {
+        vals.push(iterator1.next().value);
     }
-    return values;
+    return vals;
 }
 
 function generatePassword() {
@@ -135,16 +163,11 @@ function generatePassword() {
     ])
 
     var passWord = new Pwd(len, lower, upper, num, spec);
-    console.log(passWord.length);
-    console.log(passWord.low);
-    console.log(passWord.up);
-    console.log(passWord.numb);
-    console.log(passWord.specChar);
 
-    bewls = getBools(passMap);
-    newPassword(bewls);
+    values = getVals(passMap);
+    passWord = newPassword(values);
 
-    // Password is generated depending on user's inputs
+/*     // Password is generated depending on user's inputs
     if ((lower === true) && (upper === true) && (num === true) && (spec === true)) {
         // The 4 string version of our 'contain' functions. We only needed it once, so no function
         let contAll1 = false, contAll2 = false, contAll3 = false, contAll4 = false;
@@ -199,7 +222,7 @@ function generatePassword() {
     }
     else if ((lower === false) && (upper === false) && (num === false) && (spec === true)) {
         passWord = passwordConcat (len, specialChar);
-    }
+    } */
     return passWord;
 }
 
