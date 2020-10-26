@@ -2,12 +2,12 @@
 
 // Use type coercion to parse the string, and use parseFloat to ensure whitespace fails
 function isNumeric(str) {
-    // We return the opposite isNaN, in this way, numbers will come back true
+    // We return the opposite of isNaN, in this way, numbers will come back true
     // Using && means if either statement is false, the whole thing is false
     return !isNaN(str) && !isNaN(parseFloat(str));
 }
 
-// Takes an array and checks if any element is false
+// Takes an array and returns false if any element is false, otherwise returns true
 function checkTrue(arrayF) {
     for (var i = 0; i < arrayF.length; i++) {
         if (arrayF[i] === false) {
@@ -24,29 +24,30 @@ function randomIndex (indexed) {
 }
 
 // Add random indexes from str to the password until it reaches the desired length
-function passwordConcat (length, str) {
+function passwordConcat (length, charSet) {
     // Starts with empty string to be concatenated
     var passwd = "";
     for (var i = 0; i < length; i++) {
-        passwd += randomIndex(str);
+        passwd += randomIndex(charSet);
     }
     return passwd;
 }
 
 // Compare 2 strings and check whether they have mutually exclusive characters
-function mustContain(passwd, str) {
-    var doesCont = false;
-    for (var j = 0; j < passwd.length; j++) {
-        for (var k = 0; k < str.length; k++) {
+function mustContain(str1, str2) {
+    for (var j = 0; j < str1.length; j++) {
+        for (var k = 0; k < str2.length; k++) {
             // If a single character between the strings matches, we are done
-            if (passwd.indexOf(str[k]) !== -1) {
-                doesCont = true;
+            if (str1.indexOf(str2[k]) !== -1) {
+                return true;
             }
         }
     }
-    return doesCont;
+    return false;
 }
 
+// Takes a map and stores the values of each key/value pair from that map
+// in an array in the order (order is important) they were added to the map
 function getVals(map1) {
     let vals = [];
     const iterator1 = map1.values();
@@ -56,43 +57,7 @@ function getVals(map1) {
     return vals;
 }
 
-function newPassword(vals) {
-
-    const specCha = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
-    const specChar = specCha + '"';
-    const charSets = ["abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789", specChar];
-    var length = vals.shift();
-    var charCheck = [];
-    var newSet = [];
-    var passChar = "";
-
-    for (var i = 0; i < vals.length; i++) {
-        console.log(vals[i]);
-        if (vals[i] === true) {
-            charCheck.push(false);
-            newSet.push(charSets[i]);
-            passChar += charSets[i];
-        }
-        console.log(newSet);
-    }
-
-    while (checkTrue(charCheck) === false) {
-        for (var j = 0; j < charCheck.length; j++) {
-            charCheck[j] = false;            
-        }
-        var word = passwordConcat(length, passChar);
-        console.log(word);
-        for (var k = 0; k < charCheck.length; k++) {
-            charCheck[k] = mustContain(word, newSet[k]);
-            console.log(charCheck[k]);
-        }
-    }
-    return word;
-}
-
 function generatePassword() {
-
-    var passWord
 
     // User interaction section
     alert("You will be prompted to indicate the length and what type of characters you want your password to contain");
@@ -115,6 +80,7 @@ function generatePassword() {
         var spec = confirm("Would you like your password to contain special characters?");
     }
 
+    // Just doing map things for to learn
     var passMap = new Map ([
         ["length", len],
         ["low", lower],
@@ -123,9 +89,43 @@ function generatePassword() {
         ["specChar", spec],
     ])
 
-    values = getVals(passMap);
-    passWord = newPassword(values);
-    return passWord;
+    var vals = getVals(passMap);
+    const specChar = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
+    const specChars = specChar + '"';
+    const fullCharSet = ["abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789", specChars];
+
+    // Steals the length element from the front of the vals array, leaving an array of booleans
+    var length = vals.shift();
+    var charCheck = [];
+    var requestedCharSet = [];
+    var passChar = "";
+
+    // Loop through the list of booleans
+    for (var i = 0; i < vals.length; i++) {
+        console.log(vals[i]);
+        // Each time the user chose to include a particular character set, we do a few things
+        if (vals[i] === true) {
+            charCheck.push(false);
+            requestedCharSet.push(fullCharSet[i]);
+            passChar += fullCharSet[i];
+        }
+        console.log(requestedCharSet);
+    }
+
+    while (checkTrue(charCheck) === false) {
+        // Reset all the values to false
+        for (var j = 0; j < charCheck.length; j++) {
+            charCheck[j] = false;            
+        }
+        var word = passwordConcat(length, passChar);
+        console.log(word);
+        // Change the false to true if the generated password contains characters from the set
+        for (var k = 0; k < charCheck.length; k++) {
+            charCheck[k] = mustContain(word, requestedCharSet[k]);
+            console.log(charCheck[k]);
+        }
+    }
+    return word;
 }
 
 // Write password to the #password input
