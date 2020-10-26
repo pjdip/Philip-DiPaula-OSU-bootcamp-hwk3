@@ -1,8 +1,69 @@
 // Functions
-function generatePassword() {
-    var passWord = "";
 
-    // Individual char sets
+// Use type coercion to parse the string, and use parseFloat to ensure whitespace fails
+function isNumeric(str) {
+    // We return the opposite isNaN, in this way, numbers will come back true
+    // Using && means if either statement is false, the whole thing is false
+    return !isNaN(str) && !isNaN(parseFloat(str));
+}
+
+// Returns a random index from the argument
+function randomIndex (indexed) {
+    x = Math.floor(Math.random() * indexed.length);
+    return indexed[x];
+}
+
+// Add random indexes from str to the password until it reaches the desired length
+function passwordConcat (length, str) {
+    // Starts with empty string to be concatenated
+    var passwd = ""
+    for (var i = 0; i < length; i++) {
+        passwd += randomIndex(str);
+    }
+    return passwd;
+}
+
+// Compare 2 strings and check whether they have mutually exclusive characters
+function mustContain(passwd, str) {
+    var doesCont = false;
+    for (var j = 0; j < passwd.length; j++) {
+        for (var k = 0; k < str.length; k++) {
+            // If a single character between the strings matches, we are done
+            if (passwd.indexOf(str[k]) !== -1) {
+                doesCont = true;
+            }
+        }
+    }
+    return doesCont;
+}
+
+// Given 2 strings, creates a password and checks if it contains characters from each string
+function contain2 (length, a, b) {
+    var contAll1 = false, contAll2 = false;
+    // The loop runs until both variables change to true
+    while (contAll1 === false || contAll2 === false) {
+        // Create a password with given parameters
+        var passwd = passwordConcat (length, a + b);
+        console.log(passwd);
+        // Check that the password contains characters from both building block strings
+        contAll1 = mustContain (passwd, a), contAll2 = mustContain (passwd, b);
+    }
+    return passwd;
+}
+
+// Same as above but with 3 strings
+function contain3 (length, a, b, c) {
+    var contAll1 = false, contAll2 = false, contAll3 = false;
+    while (contAll1 === false || contAll2 === false || contAll3 === false) {
+        var passwd = passwordConcat (length, a + b + c);
+        console.log(passwd);
+        contAll1 = mustContain (passwd, a), contAll2 = mustContain (passwd, b), contAll3 = mustContain (passwd, c);
+    }
+    return passwd;
+}
+
+function generatePassword() {
+
     // Creating a string that includes all special chars except double quotes, then concatenating double quotes on the end
     const specialCha = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
     const specialChar = specialCha + '"';
@@ -10,163 +71,95 @@ function generatePassword() {
     const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const nums = "0123456789";
 
+    // User interaction section
     alert("You will be prompted to indicate the length and what type of characters you want your password to contain");
 
     var len = prompt("Please enter a number between 8 and 128 to designate desired password length:");
-    while (len < 8 || len > 128 || typeof(len) !== "number") {
+
+    // Ask the user for a new input if the one they give does not meet our requirements
+    while (len < 8 || len > 128 || isNumeric(len) !== true) {
         len = prompt("You must choose a number from 8 - 128:");
     }
 
-    var lower = confirm("Would you like your password to contain lowercase characters?");
-    var upper = confirm("Would you like your password to contain uppercase characters?");
-    var num = confirm("Would you like your password to contain numbers?");
-    var spec = confirm("Would you like your password to contain special characters?");
+    // Initializing values to enter the while loop
+    var lower = false, upper = false, num = false, spec = false;
+    // User must choose at least 1 confirmation to be true, or will be asked again until they do so
     while ((lower === false) && (upper === false) && (num === false) && (spec === false)) {
-        alert("You must choose at least 1 character type to include in your password, please try the process again");
+        alert("You must choose at least 1 character type (4 options) to include in your password");
         var lower = confirm("Would you like your password to contain lowercase characters?");
         var upper = confirm("Would you like your password to contain uppercase characters?");
         var num = confirm("Would you like your password to contain numbers?");
         var spec = confirm("Would you like your password to contain special characters?");
     }
 
+    // Password is generated depending on user's inputs
     if ((lower === true) && (upper === true) && (num === true) && (spec === true)) {
-        let contAll1 = false;
-        let contAll2 = false;
-        let contAll3 = false;
-        let contAll4 = false;
+        // The 4 string version of our 'contain' functions. We only needed it once, so no function
+        let contAll1 = false, contAll2 = false, contAll3 = false, contAll4 = false;
         while (contAll1 === false || contAll2 === false || contAll3 === false || contAll4 === false) {
-            let passWord = passwordConcat (len, passWord, lowercase + uppercase + nums + specialChar);
+            passWord = passwordConcat (len, lowercase + uppercase + nums + specialChar);
             console.log(passWord);
-            contAll1 = mustContain (passWord, lowercase);
-            contAll2 = mustContain (passWord, uppercase);
-            contAll3 = mustContain (passWord, nums);
-            contAll4 = mustContain (passWord, specialChar);
+            contAll1 = mustContain (passWord, lowercase), contAll2 = mustContain (passWord, uppercase);
+            contAll3 = mustContain (passWord, nums), contAll4 = mustContain (passWord, specialChar);
         }
     }
+    // Building the password from 3 strings
     else if ((lower === true) && (upper === true) && (num === true) && (spec === false)) {
-        passWord = contain3 (len, passWord, lowercase, uppercase, nums);
+        passWord = contain3 (len, lowercase, uppercase, nums);
     }
     else if ((lower === true) && (upper === true) && (num === false) && (spec === true)) {
-        passWord = contain3 (len, passWord, lowercase, uppercase, specialChar);
+        passWord = contain3 (len, lowercase, uppercase, specialChar);
     }
     else if ((lower === true) && (upper === false) && (num === true) && (spec === true)) {
-        passWord = contain3 (len, passWord, lowercase, nums, specialChar);
+        passWord = contain3 (len, lowercase, nums, specialChar);
     }
     else if ((lower === false) && (upper === true) && (num === true) && (spec === true)) {
-        passWord = contain3 (len, passWord, uppercase, nums, specialChar);
+        passWord = contain3 (len, uppercase, nums, specialChar);
     }
-    else if ((lower === true) && (upper === false) && (num === false) && (spec === false)) {
-        passWord = passwordConcat (len, passWord, lowercase);
-    }
-    else if ((lower === false) && (upper === true) && (num === false) && (spec === false)) {
-        passWord = passwordConcat (len, passWord, uppercase);
-    }
-    else if ((lower === false) && (upper === false) && (num === true) && (spec === false)) {
-        passWord = passwordConcat (len, passWord, nums);
-    }
-    else if ((lower === false) && (upper === false) && (num === false) && (spec === true)) {
-        passWord = passwordConcat (len, passWord, specialChar);
-    }
+    // Building the password from 2 strings
     else if ((lower === true) && (upper === true) && (num === false) && (spec === false)) {
-        passWord = contain2 (len, passWord, lowercase, uppercase);
+        passWord = contain2 (len, lowercase, uppercase);
     }
     else if ((lower === true) && (upper === false) && (num === true) && (spec === false)) {
-        passWord = contain2 (len, passWord, lowercase, nums);
+        passWord = contain2 (len, lowercase, nums);
     }
     else if ((lower === true) && (upper === false) && (num === false) && (spec === true)) {
-        passWord = contain2 (len, passWord, lowercase, specialChar);
+        passWord = contain2 (len, lowercase, specialChar);
     }
     else if ((lower === false) && (upper === true) && (num === true) && (spec === false)) {
-        passWord = contain2 (len, passWord, uppercase, nums);
+        passWord = contain2 (len, uppercase, nums);
     }
     else if ((lower === false) && (upper === true) && (num === false) && (spec === true)) {
-        passWord = contain2 (len, passWord, uppercase, specialChar);
+        passWord = contain2 (len, uppercase, specialChar);
     }
     else if ((lower === false) && (upper === false) && (num === true) && (spec === true)) {
-        passWord = contain2 (len, passWord, nums, specialChar);
+        passWord = contain2 (len, nums, specialChar);
+    }
+    // Only building the password from 1 string, so no need to verify contents
+    else if ((lower === true) && (upper === false) && (num === false) && (spec === false)) {
+        passWord = passwordConcat (len, lowercase);
+    }
+    else if ((lower === false) && (upper === true) && (num === false) && (spec === false)) {
+        passWord = passwordConcat (len, uppercase);
+    }
+    else if ((lower === false) && (upper === false) && (num === true) && (spec === false)) {
+        passWord = passwordConcat (len, nums);
+    }
+    else if ((lower === false) && (upper === false) && (num === false) && (spec === true)) {
+        passWord = passwordConcat (len, specialChar);
     }
     return passWord;
 }
 
-function contain2 (leng, pass, a, b) {
-    let contAll1 = false;
-    let contAll2 = false;
-    while (contAll1 === false || contAll2 === false) {
-        var passW = passwordConcat (leng, pass, a + b);
-        console.log(passW);
-        contAll1 = mustContain (passW, a);
-        contAll2 = mustContain (passW, b);
-    }
-    return passW;
-}
-
-function contain3 (leng, pass, a, b, c) {
-    let contAll1 = false;
-    let contAll2 = false;
-    let contAll3 = false;
-    while (contAll1 === false || contAll2 === false || contAll3 === false) {
-        var passW = passwordConcat (leng, pass, a + b + c);
-        console.log(passW);
-        contAll1 = mustContain (passW, a);
-        contAll2 = mustContain (passW, b);
-        contAll3 = mustContain (passW, c);
-    }
-    return passW;
-}
-
-function mustContain(pwd, str) {
-    let doesCont = false;
-    for (var j = 0; j < pwd.length; j++) {
-        for (var k = 0; k < str.length; k++) {
-            if (pwd.indexOf(str[k]) !== -1) {
-                let doesCont = true;
-            }
-        }
-    }
-    return doesCont;
-}
-
-function passwordConcat (length, passwd, aStr) {
-    for (var i = 0; i < length; i++) {
-        passwd += randomIndex(aStr);
-    }
-    return passwd;
-}
-
-function randomIndex (indexed) {
-    x = Math.floor(Math.random() * indexed.length);
-    return indexed[x];
-}
-
 // Write password to the #password input
 function writePassword() {
-    var password = generatePassword();
-    var passwordText = document.querySelector("#password");
-
+    let password = generatePassword();
+    let passwordText = document.querySelector("#password");
     passwordText.value = password;
 }
-
 
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
 
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
-
-
-/*     // Pair char sets
-    const lowup = lowercase + uppercase;
-    const lownum = lowercase + nums;
-    const lowspec = lowercase + specialChar;
-    const upnum = uppercase + nums;
-    const upspec = uppercase + specialChar;
-    const numspec = nums + specialChar;
-
-    // Triple char sets
-    const lowupnum = lowercase + uppercase + nums;
-    const lowupspec = lowercase + uppercase + specialChar;
-    const lownumspec =  lowercase + nums + specialChar;
-    const upnumspec =  uppercase + nums + specialChar;
-
-    // Full char set
-    const lowupnumspec = lowercase + uppercase + nums + specialChar; */
