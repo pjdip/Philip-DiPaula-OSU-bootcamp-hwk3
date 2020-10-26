@@ -106,6 +106,8 @@ function generatePassword() {
         // Each time the user chose to include a particular character set, we do a few things
         if (vals[i] === true) {
             charCheck.push(false);
+            // Building a new charSet array because cutting off elements mid loop changes the length,
+            // ex: if we exclude spec char after already cutting out one of the other sets, fullCharSet[3] is undefined
             requestedCharSet.push(fullCharSet[i]);
             passChar += fullCharSet[i];
         }

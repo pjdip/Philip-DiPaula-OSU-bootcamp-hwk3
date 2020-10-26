@@ -26,9 +26,11 @@ In order to use this project, simply open the index.html in your favorite browse
 
 ## Credits
 
-Thanks to Mozilla Developer Network for a little clarification on the [indexOf()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/indexOf) method.
+Thanks to Mozilla Developer Network for a little clarification on how to manipulate [strings](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/indexOf), [arrays](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array), and [maps](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/values)
 
-Thanks to stackoverflow friends for information about [checking a string for valid numbers](https://stackoverflow.com/questions/175739/built-in-way-in-javascript-to-check-if-a-string-is-a-valid-number) as well as for syntax on [declaring multiple variables on a single line](https://stackoverflow.com/questions/4166785/javascript-how-to-define-multiple-variables-on-a-single-line) 
+Thanks to stackoverflow friends for information about [checking a string for valid numbers](https://stackoverflow.com/questions/175739/built-in-way-in-javascript-to-check-if-a-string-is-a-valid-number) as well as for syntax on [declaring multiple variables on a single line](https://stackoverflow.com/questions/4166785/javascript-how-to-define-multiple-variables-on-a-single-line)
+
+Thanks to git documentation for help with [branching/merging](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging)
 
 Special Thanks to [ChilledCow](https://www.youtube.com/channel/UCSJ4gkVC6NrvII8umztf0Ow) for providing chill lofi beats to code to
 
