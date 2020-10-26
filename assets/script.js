@@ -70,6 +70,7 @@ function generatePassword() {
     const lowercase = "abcdefghijklmnopqrstuvwxyz";
     const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const nums = "0123456789";
+    var passWord
 
     // User interaction section
     alert("You will be prompted to indicate the length and what type of characters you want your password to contain");

@@ -48,35 +48,35 @@ This homework is graded based on the following criteria:
 
 * Satisfies all of the above acceptance criteria plus the following:
 
-  * The homework should not produce any errors in the console when you inspect it using Chrome DevTools.
+  * The homework should not produce any errors in the console when you inspect it using Chrome DevTools. (done)
 
 ### Deployment: 32%
 
 * Application deployed at live URL.
 
-* Application loads with no errors.
+* Application loads with no errors. (done)
 
 * Application GitHub URL submitted.
 
-* GitHub repository that contains application code.
+* GitHub repository that contains application code. (done)
 
 ### Application Quality: 15%
 
-* Application user experience is intuitive and easy to navigate.
+* Application user experience is intuitive and easy to navigate. (done)
 
-* Application user interface style is clean and polished.
+* Application user interface style is clean and polished. (done)
 
-* Application resembles the mock-up functionality provided in the homework instructions.
+* Application resembles the mock-up functionality provided in the homework instructions. (done)
 
 ### Repository Quality: 13%
 
-* Repository has a unique name.
+* Repository has a unique name. (done)
 
-* Repository follows best practices for file structure and naming conventions.
+* Repository follows best practices for file structure and naming conventions. (done)
 
-* Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
+* Repository follows best practices for class/id naming conventions, indentation, quality comments, etc. (done)
 
-* Repository contains multiple descriptive commit messages.
+* Repository contains multiple descriptive commit messages. (done)
 
 * Repository contains quality README file with description, screenshot, and link to deployed application.
 
