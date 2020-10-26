@@ -16,11 +16,25 @@ function randomIndex (indexed) {
 // Add random indexes from str to the password until it reaches the desired length
 function passwordConcat (length, str) {
     // Starts with empty string to be concatenated
-    var passwd = ""
+    var passwd = "";
     for (var i = 0; i < length; i++) {
         passwd += randomIndex(str);
     }
     return passwd;
+}
+
+function newPassword(bools) {
+    var passWord = "";
+    const specCha = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
+    const specChar = specCha + '"';
+    const charSets = ["abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789", specChar];
+    passChar = "";
+    for (var i = 0; i < bools.length; i++) {
+        if (bools[i] === true) {
+            passChar += charSets[i];
+        }
+    }
+    console.log(passChar);
 }
 
 // Compare 2 strings and check whether they have mutually exclusive characters
@@ -62,14 +76,33 @@ function contain3 (length, a, b, c) {
     return passwd;
 }
 
+class Pwd {
+    constructor(length, low, up, numb, specChar){
+        this.length = length;
+        this.low = low;
+        this.up = up;
+        this.numb = numb;
+        this.specChar = specChar;
+    }
+}
+
+function getBools(map1) {
+    values = [];
+    const iterator1 = map1.values();
+    console.log(typeof(iterator1.next().value));
+    for (var i = 0; i < map1.size - 1; i++) {
+        values.push(iterator1.next().value);
+    }
+    return values;
+}
+
 function generatePassword() {
 
-    // Creating a string that includes all special chars except double quotes, then concatenating double quotes on the end
-    const specialCha = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
-    const specialChar = specialCha + '"';
     const lowercase = "abcdefghijklmnopqrstuvwxyz";
     const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const nums = "0123456789";
+    const specialCha = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
+    const specialChar = specialCha + '"';
     var passWord
 
     // User interaction section
@@ -92,6 +125,24 @@ function generatePassword() {
         var num = confirm("Would you like your password to contain numbers?");
         var spec = confirm("Would you like your password to contain special characters?");
     }
+
+    var passMap = new Map ([
+        ["length", len],
+        ["low", lower],
+        ["up", upper],
+        ["numb", num],
+        ["specChar", spec],
+    ])
+
+    var passWord = new Pwd(len, lower, upper, num, spec);
+    console.log(passWord.length);
+    console.log(passWord.low);
+    console.log(passWord.up);
+    console.log(passWord.numb);
+    console.log(passWord.specChar);
+
+    bewls = getBools(passMap);
+    newPassword(bewls);
 
     // Password is generated depending on user's inputs
     if ((lower === true) && (upper === true) && (num === true) && (spec === true)) {
