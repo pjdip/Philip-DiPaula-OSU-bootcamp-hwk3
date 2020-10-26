@@ -7,6 +7,16 @@ function isNumeric(str) {
     return !isNaN(str) && !isNaN(parseFloat(str));
 }
 
+// Takes an array and checks if any element is false
+function checkTrue(arrayF) {
+    for (var i = 0; i < arrayF.length; i++) {
+        if (arrayF[i] === false) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // Returns a random index from the argument
 function randomIndex (indexed) {
     x = Math.floor(Math.random() * indexed.length);
@@ -37,9 +47,17 @@ function mustContain(passwd, str) {
     return doesCont;
 }
 
-/* function setChange() */
+function getVals(map1) {
+    let vals = [];
+    const iterator1 = map1.values();
+    for (var i = 0; i < map1.size; i++) {
+        vals.push(iterator1.next().value);
+    }
+    return vals;
+}
 
 function newPassword(vals) {
+
     const specCha = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
     const specChar = specCha + '"';
     const charSets = ["abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789", specChar];
@@ -47,6 +65,7 @@ function newPassword(vals) {
     var charCheck = [];
     var newSet = [];
     var passChar = "";
+
     for (var i = 0; i < vals.length; i++) {
         console.log(vals[i]);
         if (vals[i] === true) {
@@ -71,66 +90,8 @@ function newPassword(vals) {
     return word;
 }
 
-function checkTrue(arrayF) {
-    for (var i = 0; i < arrayF.length; i++) {
-        if (arrayF[i] === false) {
-            return false;
-        }
-    }
-    return true;
-}
-
-/* // Given 2 strings, creates a password and checks if it contains characters from each string
-function contain2 (length, a, b) {
-    var contAll1 = false, contAll2 = false;
-    // The loop runs until both variables change to true
-    while (contAll1 === false || contAll2 === false) {
-        // Create a password with given parameters
-        var passwd = passwordConcat (length, a + b);
-        console.log(passwd);
-        // Check that the password contains characters from both building block strings
-        contAll1 = mustContain (passwd, a), contAll2 = mustContain (passwd, b);
-    }
-    return passwd;
-}
-
-// Same as above but with 3 strings
-function contain3 (length, a, b, c) {
-    var contAll1 = false, contAll2 = false, contAll3 = false;
-    while (contAll1 === false || contAll2 === false || contAll3 === false) {
-        var passwd = passwordConcat (length, a + b + c);
-        console.log(passwd);
-        contAll1 = mustContain (passwd, a), contAll2 = mustContain (passwd, b), contAll3 = mustContain (passwd, c);
-    }
-    return passwd;
-} */
-
-class Pwd {
-    constructor(length, low, up, numb, specChar){
-        this.length = length;
-        this.low = low;
-        this.up = up;
-        this.numb = numb;
-        this.specChar = specChar;
-    }
-}
-
-function getVals(map1) {
-    let vals = [];
-    const iterator1 = map1.values();
-    for (var i = 0; i < map1.size; i++) {
-        vals.push(iterator1.next().value);
-    }
-    return vals;
-}
-
 function generatePassword() {
 
-    const lowercase = "abcdefghijklmnopqrstuvwxyz";
-    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const nums = "0123456789";
-    const specialCha = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
-    const specialChar = specialCha + '"';
     var passWord
 
     // User interaction section
@@ -162,67 +123,8 @@ function generatePassword() {
         ["specChar", spec],
     ])
 
-    var passWord = new Pwd(len, lower, upper, num, spec);
-
     values = getVals(passMap);
     passWord = newPassword(values);
-
-/*     // Password is generated depending on user's inputs
-    if ((lower === true) && (upper === true) && (num === true) && (spec === true)) {
-        // The 4 string version of our 'contain' functions. We only needed it once, so no function
-        let contAll1 = false, contAll2 = false, contAll3 = false, contAll4 = false;
-        while (contAll1 === false || contAll2 === false || contAll3 === false || contAll4 === false) {
-            passWord = passwordConcat (len, lowercase + uppercase + nums + specialChar);
-            console.log(passWord);
-            contAll1 = mustContain (passWord, lowercase), contAll2 = mustContain (passWord, uppercase);
-            contAll3 = mustContain (passWord, nums), contAll4 = mustContain (passWord, specialChar);
-        }
-    }
-    // Building the password from 3 strings
-    else if ((lower === true) && (upper === true) && (num === true) && (spec === false)) {
-        passWord = contain3 (len, lowercase, uppercase, nums);
-    }
-    else if ((lower === true) && (upper === true) && (num === false) && (spec === true)) {
-        passWord = contain3 (len, lowercase, uppercase, specialChar);
-    }
-    else if ((lower === true) && (upper === false) && (num === true) && (spec === true)) {
-        passWord = contain3 (len, lowercase, nums, specialChar);
-    }
-    else if ((lower === false) && (upper === true) && (num === true) && (spec === true)) {
-        passWord = contain3 (len, uppercase, nums, specialChar);
-    }
-    // Building the password from 2 strings
-    else if ((lower === true) && (upper === true) && (num === false) && (spec === false)) {
-        passWord = contain2 (len, lowercase, uppercase);
-    }
-    else if ((lower === true) && (upper === false) && (num === true) && (spec === false)) {
-        passWord = contain2 (len, lowercase, nums);
-    }
-    else if ((lower === true) && (upper === false) && (num === false) && (spec === true)) {
-        passWord = contain2 (len, lowercase, specialChar);
-    }
-    else if ((lower === false) && (upper === true) && (num === true) && (spec === false)) {
-        passWord = contain2 (len, uppercase, nums);
-    }
-    else if ((lower === false) && (upper === true) && (num === false) && (spec === true)) {
-        passWord = contain2 (len, uppercase, specialChar);
-    }
-    else if ((lower === false) && (upper === false) && (num === true) && (spec === true)) {
-        passWord = contain2 (len, nums, specialChar);
-    }
-    // Only building the password from 1 string, so no need to verify contents
-    else if ((lower === true) && (upper === false) && (num === false) && (spec === false)) {
-        passWord = passwordConcat (len, lowercase);
-    }
-    else if ((lower === false) && (upper === true) && (num === false) && (spec === false)) {
-        passWord = passwordConcat (len, uppercase);
-    }
-    else if ((lower === false) && (upper === false) && (num === true) && (spec === false)) {
-        passWord = passwordConcat (len, nums);
-    }
-    else if ((lower === false) && (upper === false) && (num === false) && (spec === true)) {
-        passWord = passwordConcat (len, specialChar);
-    } */
     return passWord;
 }
 
